@@ -1,0 +1,28 @@
+sudo: required
+services:
+  - docker
+
+# Prvo builduj sliku pa uradi test na slici. Moze vise njih
+before_install:
+  - docker build -t djulb/react-complex-test -f ./client/Dockerfile.dev ./client
+  
+# Uradi test na slici
+# Ako padne nema builda
+script:
+  - docker run djulb/react-complex-test npm run test -- --coverage
+
+after_success:
+  - docker build -t djulb/multi-c-client ./client
+  - docker build -t djulb/multi-c-api ./api
+  - docker build -t djulb/multi-c-nginx ./nginx
+  - docker build -t djulb/multi-c-worker ./worker
+
+# Log in to Docker CLI. Mora ovako zbog wizarda
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+# Take images and push
+  - docker push djulb/multi-c-client
+  - docker push djulb/multi-c-api
+  - docker push djulb/multi-c-nginx
+  - docker push djulb/multi-c-worker
+  
+
