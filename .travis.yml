@@ -1,6 +1,9 @@
 sudo: required
+language: generic
+
 services:
   - docker
+
 
 # Prvo builduj sliku pa uradi test na slici. Moze vise njih
 before_install:
