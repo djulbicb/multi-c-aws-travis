@@ -27,5 +27,17 @@ after_success:
   - docker push djulb/multi-c-api
   - docker push djulb/multi-c-nginx
   - docker push djulb/multi-c-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'us-east-2'
+  app: 'multi-docker-c'
+  env: 'Multidockerc-env'
+  bucket_name: 'elasticbeanstalk-us-east-2-494977117738'
+  bucket_path: 'multi-docker-c'
+  on:
+    branch: main
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
   
 
